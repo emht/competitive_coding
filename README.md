@@ -32,3 +32,4 @@ Git commands I used:
 
 To understand git and github more properly follow, my Understanding-Github repo, git-scm and try.github.com.  All these resources are well described in my Understanding-Github repo.
 
+Note: At first visit, just solve the problem, later revisit the problem and Improve it to incorporate Dynamic programming.
