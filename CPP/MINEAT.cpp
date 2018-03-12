@@ -14,7 +14,7 @@ using namespace std;
 
 int main(void) {
 	int testcase;
-	int output, num_pile, hour, k, temp_hour;
+	long int num_pile, hour, k, temp_hour;
 	float temp;
 	cin >> testcase;
 
