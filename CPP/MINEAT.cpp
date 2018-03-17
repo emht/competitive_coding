@@ -2,115 +2,68 @@
  * Minion Chef and bananas
  * Platform: codechef
  * Link: https://www.codechef.com/MARCH18B/problems/MINEAT
- * Concept: Correct from my side. Missing some critical test cases, IDK which ones :/
+ * Concept: Binary search to find correct K
  * Status: Failed
  */
 
 #include <iostream>
 #include <algorithm> //Sort function
+#include <cmath> // Ceil function
 using namespace std;
 
 #define FOR(I, A, B) for(int I = (A); I < (B); ++I)
 
+long long find_k(long long pile[], long long hours, long long low, long long max, long num_pile); 
+
 int main(void) {
 	int testcase;
-	long int num_pile, hour, k, temp_hour;
-	float temp;
 	cin >> testcase;
 
-	bool decrease = false, increase = false;
+	long num_pile;
+	long long hours, k, max = 0;
+	double average = 0;
 
 	while(testcase--) {
-		cin >> num_pile >> hour;
-		long int pile_size[num_pile], average = 0, total_sum = 0, temp_sum;
+		cin >> num_pile >> hours;
+		long long pile[num_pile];
 
-		for (int i = 0; i < num_pile; i++) {	
-			cin >> pile_size[i];
-			total_sum = pile_size[i] + total_sum;
+		FOR (i, 0, num_pile) {
+			cin >> pile[i];
+			average = average + pile[i];
+			if (pile[i] > max) { max = pile[i]; }
 		}
 
-		average = total_sum / num_pile;
-	
-		// Sort the array
-		sort(pile_size, pile_size + num_pile);
+		average = average / num_pile;
 
-		if (hour == num_pile) {
+		if (hours == num_pile) {
 			// Initialising k with the largest size
-			k = pile_size[num_pile - 1];
+			k = max;
 			cout << k << endl;
 		}
 		else {
-			// Logic when hour != num_pile
-			k = average;
-			//cout << "K is: " << k << endl;
-			decrease = increase = false;
-
-			temp_sum = total_sum;
-			temp_hour = hour;
-			temp = 0;
-
-			FOR(i, 0, num_pile) {
-				if (pile_size[i] <= k) {
-					temp_sum = temp_sum - pile_size[i];
-					temp_hour--;
-				}
-				else {
-					temp_sum = temp_sum - k;
-					temp_hour--;
-				}
-			}
-
-			temp = float(temp_sum) / temp_hour;
-			//cout << "temp is: " << temp << endl;
-			if (temp < k) { decrease = true;}
-			else if (temp > k) { increase = true;}
-			else if (temp == k) { cout << k << endl; }
-
-			if (increase) {
-				while(temp > k) {
-					k++;
-					//continue with k, final k is the answer
-					temp_sum = total_sum;
-					temp_hour = hour;
-
-					FOR(i, 0, num_pile) {
-						if (pile_size[i] <= k) {
-							temp_sum = temp_sum - pile_size[i];
-							temp_hour--;
-						}
-						else {
-							temp_sum = temp_sum - k;
-							temp_hour--;
-						}
-					}
-					temp = float(temp_sum) / temp_hour;
-				}
-				cout << k << endl;
-			}
-			else if (decrease) {
-				while (temp < k) {
-					// continue with k - 1, k+1 is the answer
-					k--;
-					//cout << "K is: " << k << endl;
-					temp_sum = total_sum;
-					temp_hour = hour;
-
-					FOR(i, 0, num_pile) {
-						if (pile_size[i] <= k) {
-							temp_sum = temp_sum - pile_size[i];
-							temp_hour--;
-						}
-						else {
-							temp_sum = temp_sum - k;
-							temp_hour--;
-						}
-					}
-					temp = float(temp_sum) / temp_hour;
-					//cout << "temp is: " << temp << endl;
-				}
-				cout << k + 1 << endl;
-			}
+			k = find_k(pile, hours, 0, max, num_pile);	
+			cout << k << endl; 
 		}
 	}
 	return 0;
+}
+
+long long find_k(long long pile[], long long hours, long long low, long long max, long num_pile) {
+	if (max >= low) {
+		long long mid = (low + max) / 2, sum = 0, k = mid;
+//		cout << "K is: " << k << endl;
+	
+		FOR(i, 0, num_pile) {
+			if (pile[i] % k == 0) { sum = sum + pile[i] / k; }
+			else { sum = sum + (pile[i] / k) + 1; }
+//			cout << "sum is: " << sum << endl;
+		}
+
+//		if (low == mid && max == mid + 1)
+//			return mid + 1;
+	
+		if (sum < hours) { return find_k(pile, hours, low, mid, num_pile); }
+		else if (sum > hours) { return find_k(pile, hours, mid, max, num_pile); }
+		else { return mid; }
+	}
 }
