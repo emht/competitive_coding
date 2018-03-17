@@ -39,6 +39,10 @@ typedef vector<bool> vb;
 int main(void) {
 	printf("Hello, World\n");
 
+	// Setting the precision factor for cout double
+	cout.setf(ios::fixed, ios::floatfield);
+	cout.precision(6);
+
 
 	return 0;
 }
