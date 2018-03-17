@@ -3,7 +3,7 @@
  * Platform: codechef
  * Link: https://www.codechef.com/MARCH18B/problems/MINEAT
  * Concept: Binary search to find correct K
- * Status: Failed
+ * Status: passed
  */
 
 #include <iostream>
@@ -59,11 +59,10 @@ long long find_k(long long pile[], long long hours, long long low, long long max
 //			cout << "sum is: " << sum << endl;
 		}
 
-//		if (low == mid && max == mid + 1)
-//			return mid + 1;
+		if (low == mid && max == mid + 1)
+			return mid + 1;
 	
-		if (sum < hours) { return find_k(pile, hours, low, mid, num_pile); }
+		if (sum <= hours) { return find_k(pile, hours, low, mid, num_pile); }
 		else if (sum > hours) { return find_k(pile, hours, mid, max, num_pile); }
-		else { return mid; }
 	}
 }
